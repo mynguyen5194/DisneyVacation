@@ -22,7 +22,7 @@ public class DisneysCottages extends JFrame{
 	public DisneysCottages() {
 		this.setTitle("Disney's Cottages Price Calculation");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(400,400);
+		this.setSize(400,150);
 		
 		this.setLayout(new BorderLayout());
 		
