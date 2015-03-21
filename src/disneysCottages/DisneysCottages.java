@@ -30,7 +30,6 @@ public class DisneysCottages extends JFrame{
 		add(commandPanel, BorderLayout.CENTER);
 		
 		button.addActionListener(new buttonListener());
-		
 	}
 	
 	public void buildCommandPanel() {
@@ -61,9 +60,6 @@ public class DisneysCottages extends JFrame{
 		commandPanel.add(twoBedBox);
 		commandPanel.add(rowboatBox);
 		commandPanel.add(button);
-		
-//		button.addActionListener(new buttonListener());
-		
 	}
 	
 	public Date stringToDate(String stringDate) {
@@ -71,7 +67,9 @@ public class DisneysCottages extends JFrame{
 	    DateFormat dateFormat = new SimpleDateFormat("MMddyyyy");
 	    
 	    try{
-	        date = dateFormat.parse(stringDate);
+	    
+	   		date = dateFormat.parse(stringDate);
+	    
 	    }
 	    catch ( Exception ex ){
 	        System.out.println(ex);
@@ -79,7 +77,10 @@ public class DisneysCottages extends JFrame{
 		return date;
 	}
 	
-	public int calculateDaysBetween(Date dateStart, Date dateEnd) {
+	public int calculateDaysBetween() {
+		Date dateStart = stringToDate(startingDateText.getText());
+		Date dateEnd = stringToDate(endingDateText.getText());
+		
 		int dateBetween = 0;
 		
 		dateBetween = (int) (dateEnd.getTime() - dateStart.getTime()) / (1000*3600*24);
@@ -103,42 +104,28 @@ public class DisneysCottages extends JFrame{
 		return total;
 	}
 	
-	
-	class buttonListener implements ActionListener, ItemListener {
-		double total;
+	class buttonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Date dateStart = stringToDate(startingDateText.getText());
-			Date dateEnd = stringToDate(endingDateText.getText());
-			int days = calculateDaysBetween(dateStart, dateEnd);
+			double totalPrice = 0;
 			
-			
-//			if(e.getSource().equals(oneBedBox) ) {
-			if(e.getActionCommand().equals(oneBedBox)) {
-				total = calculatePrice(days, "oneBedBox");
+			if(oneBedBox.isSelected() && rowboatBox.isSelected()) {
+				totalPrice = calculatePrice(calculateDaysBetween(), "oneBedBox") +
+						calculatePrice(calculateDaysBetween(), "rowboatBox");
 			}
-			else if(e.getActionCommand().equals(twoBedBox)) {
-				total = calculatePrice(days, "twoBedBox");
+			else if(oneBedBox.isSelected()) {
+				totalPrice = calculatePrice(calculateDaysBetween(), "oneBedBox");
 			}
-			
-			else if(e.getActionCommand().equals(rowboatBox)) {
-				total += calculatePrice(days, "rowboatBox");
+			else if(twoBedBox.isSelected() && rowboatBox.isSelected()) {
+				totalPrice = calculatePrice(calculateDaysBetween(), "twoBedBox") +
+						calculatePrice(calculateDaysBetween(), "rowboatBox");
 			}
-			
-			JOptionPane.showMessageDialog(null, "You stay for " + total + " days");
-		}
+			else if(twoBedBox.isSelected()) {
+				totalPrice = calculatePrice(calculateDaysBetween(), "twoBedBox");
+			}
 		
-		public void itemStateChanged(ItemEvent b) {
-			Date dateStart = stringToDate(startingDateText.getText());
-			Date dateEnd = stringToDate(endingDateText.getText());
-			int days = calculateDaysBetween(dateStart, dateEnd);
-			
-			
-			if(b.getSource() == rowboatBox) {
-				total += calculatePrice(days, "rowboatBox");
-			}
-			
+			JOptionPane.showMessageDialog(null, "Total price for " + calculateDaysBetween()
+					+ " days of vacation: "+ String.format("%1.2f", totalPrice) + " dollars");
 		}
-
 	}
 	
 	public static void main(String[] args) {
