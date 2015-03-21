@@ -29,7 +29,7 @@ public class DisneysCottages extends JFrame{
 		this.buildCommandPanel();
 		add(commandPanel, BorderLayout.CENTER);
 		
-		
+		button.addActionListener(new buttonListener());
 		
 	}
 	
@@ -62,7 +62,8 @@ public class DisneysCottages extends JFrame{
 		commandPanel.add(rowboatBox);
 		commandPanel.add(button);
 		
-		button.addActionListener(new buttonListener());
+//		button.addActionListener(new buttonListener());
+		
 	}
 	
 	public Date stringToDate(String stringDate) {
@@ -102,29 +103,42 @@ public class DisneysCottages extends JFrame{
 		return total;
 	}
 	
-	class buttonListener implements ActionListener {
+	
+	class buttonListener implements ActionListener, ItemListener {
+		double total;
 		public void actionPerformed(ActionEvent e) {
 			Date dateStart = stringToDate(startingDateText.getText());
 			Date dateEnd = stringToDate(endingDateText.getText());
-			
 			int days = calculateDaysBetween(dateStart, dateEnd);
 			
-			JOptionPane.showMessageDialog(null, "You stay for " + days + " days");
-				
-		}
-	}
-	
-	class boxListener implements ItemListener {
-		public void itemStateChanged(ItemEvent box) {
-			double total = 0;
-			int days = calculateDaysBetween(
-				stringToDate(startingDateText.getText()),
-				stringToDate(endingDateText.getText()));
 			
-			if(box.getSource() == oneBedBox) {
-				
+//			if(e.getSource().equals(oneBedBox) ) {
+			if(e.getActionCommand().equals(oneBedBox)) {
+				total = calculatePrice(days, "oneBedBox");
 			}
+			else if(e.getActionCommand().equals(twoBedBox)) {
+				total = calculatePrice(days, "twoBedBox");
+			}
+			
+			else if(e.getActionCommand().equals(rowboatBox)) {
+				total += calculatePrice(days, "rowboatBox");
+			}
+			
+			JOptionPane.showMessageDialog(null, "You stay for " + total + " days");
 		}
+		
+		public void itemStateChanged(ItemEvent b) {
+			Date dateStart = stringToDate(startingDateText.getText());
+			Date dateEnd = stringToDate(endingDateText.getText());
+			int days = calculateDaysBetween(dateStart, dateEnd);
+			
+			
+			if(b.getSource() == rowboatBox) {
+				total += calculatePrice(days, "rowboatBox");
+			}
+			
+		}
+
 	}
 	
 	public static void main(String[] args) {
