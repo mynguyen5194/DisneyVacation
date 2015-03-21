@@ -114,6 +114,19 @@ public class DisneysCottages extends JFrame{
 		}
 	}
 	
+	class boxListener implements ItemListener {
+		public void itemStateChanged(ItemEvent box) {
+			double total = 0;
+			int days = calculateDaysBetween(
+				stringToDate(startingDateText.getText()),
+				stringToDate(endingDateText.getText()));
+			
+			if(box.getSource() == oneBedBox) {
+				
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		DisneysCottages app = new DisneysCottages();
 		app.setVisible(true);
